@@ -12,7 +12,7 @@ export default function LoginPage() {
 
             {/* Form section */}
             <div className='flex-1 bg-primary flex items-center justify-center'>
-                <Image src={Logo} alt='logo'/>
+                <Image src={Logo} alt='logo' priority/>
             </div>
         </main>
     )
