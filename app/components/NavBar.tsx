@@ -3,7 +3,7 @@ import Link from "next/link"
 export const NavBar = () => {
     return (
         <header>
-            <nav className='bg-red-500'>
+            <nav className='bg-primary'>
                 <div className='container mx-auto flex justify-between items-center px-4 py-4'>
                     <a href='#' className='text-white text-2xl font-bold'>Logo</a>
                     <ul className='flex'>
