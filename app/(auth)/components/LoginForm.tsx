@@ -1,18 +1,51 @@
 'use client'
 
 import { Button, Form, Input } from "@heroui/react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Eye, EyeClosed, Mail } from "lucide-react";
 import Link from "next/link";
+import { loginScheme } from "@/lib/zod";
+import { IErrorsLogin } from "@/types/common";
 
 export default function LoginForm() {
 
     const [isVisible, setIsVisible] = useState(false);
+    const [errors, setErrors] = useState<IErrorsLogin>();
 
     const toggleIsVisible = () => setIsVisible(prevState => !prevState);
 
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        // Como manejamos las validaciones desde el cliente, no podemos dejar que llegue al servidor
+        e.preventDefault()
+        let errorsTemp:IErrorsLogin = {}
+
+        const data = Object.fromEntries(new FormData(e.currentTarget))
+        const validation = loginScheme.safeParse(data)
+        
+        if (!validation.success) {
+            const fieldErrors: Record<string, string> = {}
+            validation.error.errors.forEach(err => {
+                fieldErrors[err.path[0]] = err.message
+            })
+
+            errorsTemp = fieldErrors
+            setErrors(errorsTemp)
+            return
+        }
+
+        setErrors(errorsTemp)
+        console.log("Los datos pasaron las validaciones")
+    }
+
+    useEffect(() => {
+        console.log(errors)
+        return () => {
+            
+        };
+    }, [errors]);
+
     return (
-        <Form className="flex flex-col gap-7">
+        <Form onSubmit={onSubmit} className="flex flex-col gap-7">
             <section className="flex flex-1 flex-col gap-4 w-full">
                 <Input
                     isRequired
@@ -29,6 +62,8 @@ export default function LoginForm() {
                     endContent={
                         <Mail />
                     }
+                    errorMessage={errors?.email}
+                    isInvalid={!!errors?.email}
                 />
                 <Input
                     isRequired
@@ -49,6 +84,8 @@ export default function LoginForm() {
                                 <EyeClosed />}
                         </button>
                     }
+                    errorMessage={errors?.password}
+                    isInvalid={!!errors?.password}
                 />
 
                 <div className="text-default-500">
