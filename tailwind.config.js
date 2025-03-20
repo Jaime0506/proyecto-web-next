@@ -13,6 +13,9 @@ const config = {
     ],
     theme: {
         extend: {
+            colors: {
+                "primary": "#FF0000"
+            },
             backgroundColor: {
                 "primary": "#FF0000"
             },

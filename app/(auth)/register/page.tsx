@@ -1,5 +1,4 @@
-import Image from 'next/image';
-import RegisterForm from './RegisterForm';
+import RegisterForm from '../components/RegisterForm';
 
 export default function RegisterPage() {
     return (
@@ -16,4 +15,3 @@ export default function RegisterPage() {
         </main>
     );
 }
-
