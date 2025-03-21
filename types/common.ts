@@ -6,8 +6,10 @@ export interface ILogin {
 
 // Form Interface Register
 export interface IRegister extends ILogin {
-    // Aca agrega lo adicional que tiene respecto al ILogin
-    rPassword?: string
+    firstName?: string;
+    lastName?: string;
+    cedula?: string;
+    confirmPassword?: string; 
 }
 
 // Form Validation Interface Login
