@@ -23,7 +23,7 @@ export default function LoginPage() {
 
             {/* Image section */}
             <div className='flex-1 bg-primary flex items-center justify-center'>
-                <Image src={Logo} alt='logo' priority className='w-2/3' />
+                <Image src={Logo} alt='logo' className='w-2/3' />
             </div>
         </main>
     )

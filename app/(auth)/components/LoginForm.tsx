@@ -14,14 +14,28 @@ export default function LoginForm() {
 
     const toggleIsVisible = () => setIsVisible(prevState => !prevState);
 
+    const onChangeInput = (name: "email" | "password") => {
+        if (!(errors?.email || errors?.password)) return
+
+        const updatedErrors = {...errors}
+
+        if (name === "email") {
+            delete updatedErrors?.email
+        } else {
+            delete updatedErrors?.password
+        }
+
+        setErrors(updatedErrors)
+    }
+
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         // Como manejamos las validaciones desde el cliente, no podemos dejar que llegue al servidor
         e.preventDefault()
-        let errorsTemp:IErrorsLogin = {}
+        let errorsTemp: IErrorsLogin = {}
 
         const data = Object.fromEntries(new FormData(e.currentTarget))
         const validation = loginScheme.safeParse(data)
-        
+
         if (!validation.success) {
             const fieldErrors: Record<string, string> = {}
             validation.error.errors.forEach(err => {
@@ -29,8 +43,6 @@ export default function LoginForm() {
             })
 
             errorsTemp = fieldErrors
-            setErrors(errorsTemp)
-            return
         }
 
         setErrors(errorsTemp)
@@ -40,7 +52,7 @@ export default function LoginForm() {
     useEffect(() => {
         console.log(errors)
         return () => {
-            
+
         };
     }, [errors]);
 
@@ -64,6 +76,7 @@ export default function LoginForm() {
                     }
                     errorMessage={errors?.email}
                     isInvalid={!!errors?.email}
+                    onChange={() => onChangeInput("email")}
                 />
                 <Input
                     isRequired
@@ -86,6 +99,7 @@ export default function LoginForm() {
                     }
                     errorMessage={errors?.password}
                     isInvalid={!!errors?.password}
+                    onChange={() => onChangeInput("password")}
                 />
 
                 <div className="text-default-500">
