@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Button, Form, Input } from "@heroui/react";
 import React, { useState } from "react";
@@ -15,85 +15,129 @@ export default function RegisterForm() {
     const toggleIsVisible = () => setIsVisible(prevState => !prevState);
     const toggleIsConfirmVisible = () => setIsConfirmVisible(prevState => !prevState);
 
+    const onChangeInput = (name: keyof IErrorsRegister) => {
+        if (errors[name]) {
+            setErrors(prevErrors => {
+                const updatedErrors = { ...prevErrors };
+                delete updatedErrors[name];
+                return updatedErrors;
+            });
+        }
+    };
+
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        let errorsTemp: IErrorsRegister = {};
+        const formData = Object.fromEntries(new FormData(e.currentTarget));
 
-        const data = Object.fromEntries(new FormData(e.currentTarget));
-        const validation = registerScheme.safeParse(data);
-
+        const validation = registerScheme.safeParse(formData);
         if (!validation.success) {
-            const fieldErrors: Record<string, string> = {};
+            const fieldErrors: IErrorsRegister = {};
             validation.error.errors.forEach(err => {
-                fieldErrors[err.path[0]] = err.message;
+                fieldErrors[err.path[0] as keyof IErrorsRegister] = err.message;
             });
-
-            errorsTemp = fieldErrors;
-            setErrors(errorsTemp);
+            setErrors(fieldErrors);
             return;
         }
 
-        setErrors(errorsTemp);
-        console.log("Registro exitoso");
+        console.log("Registro exitoso", validation.data);
     };
 
     return (
-        <Form onSubmit={onSubmit} className="flex flex-col gap-7 w-full">
+        <Form onSubmit={onSubmit} className="flex flex-col gap-7">
             <section className="flex flex-1 flex-col gap-4 w-full">
-                <Input isRequired type="text" name="firstName" label="Nombres" variant="bordered" radius="none" />
-                <Input isRequired type="text" name="lastName" label="Apellidos" variant="bordered" radius="none" />
-                <Input isRequired type="text" name="cedula" label="Cédula" variant="bordered" radius="none" />
-                <Input 
-                    isRequired 
-                    type="email" 
-                    name="email" 
-                    label="Correo Electrónico" 
-                    variant="bordered" 
-                    radius="none" 
-                    endContent={<Mail />} 
-                    errorMessage={errors?.email || ""} 
-                    isInvalid={!!errors?.email} 
+                <Input
+                    isRequired
+                    type="text"
+                    name="firstName"
+                    label="Nombres"
+                    variant="bordered"
+                    radius="none"
+                    classNames={{ inputWrapper: ["group-data-[focus=true]:border-primary"] }}
+                    errorMessage={errors?.firstName}
+                    isInvalid={!!errors?.firstName}
+                    onChange={() => onChangeInput("firstName")}
                 />
-                <Input 
-                    isRequired 
-                    type={isVisible ? "text" : "password"} 
-                    name="password" 
-                    label="Contraseña" 
-                    variant="bordered" 
-                    radius="none" 
+                <Input
+                    isRequired
+                    type="text"
+                    name="lastName"
+                    label="Apellidos"
+                    variant="bordered"
+                    radius="none"
+                    classNames={{ inputWrapper: ["group-data-[focus=true]:border-primary"] }}
+                    errorMessage={errors?.lastName}
+                    isInvalid={!!errors?.lastName}
+                    onChange={() => onChangeInput("lastName")}
+                />
+                <Input
+                    isRequired
+                    type="text"
+                    name="cedula"
+                    label="Cédula"
+                    variant="bordered"
+                    radius="none"
+                    classNames={{ inputWrapper: ["group-data-[focus=true]:border-primary"] }}
+                    errorMessage={errors?.cedula}
+                    isInvalid={!!errors?.cedula}
+                    onChange={() => onChangeInput("cedula")}
+                />
+                <Input
+                    isRequired
+                    type="email"
+                    name="email"
+                    label="Correo Electrónico"
+                    variant="bordered"
+                    radius="none"
+                    classNames={{ inputWrapper: ["group-data-[focus=true]:border-primary"] }}
+                    endContent={<Mail />}
+                    errorMessage={errors?.email}
+                    isInvalid={!!errors?.email}
+                    onChange={() => onChangeInput("email")}
+                />
+                <Input
+                    isRequired
+                    type={isVisible ? "text" : "password"}
+                    name="password"
+                    label="Contraseña"
+                    variant="bordered"
+                    radius="none"
+                    classNames={{ inputWrapper: ["group-data-[focus=true]:border-primary"] }}
                     endContent={
                         <button type="button" onClick={toggleIsVisible} className="flex justify-center items-center">
                             {isVisible ? <Eye /> : <EyeClosed />}
                         </button>
                     }
-                    errorMessage={errors?.password || ""} 
-                    isInvalid={!!errors?.password} 
+                    errorMessage={errors?.password}
+                    isInvalid={!!errors?.password}
+                    onChange={() => onChangeInput("password")}
                 />
-                <Input 
-                    isRequired 
-                    type={isConfirmVisible ? "text" : "password"} 
-                    name="confirmPassword" 
-                    label="Confirmar Contraseña" 
-                    variant="bordered" 
-                    radius="none" 
+                <Input
+                    isRequired
+                    type={isConfirmVisible ? "text" : "password"}
+                    name="confirmPassword"
+                    label="Confirmar Contraseña"
+                    variant="bordered"
+                    radius="none"
+                    classNames={{ inputWrapper: ["group-data-[focus=true]:border-primary"] }}
                     endContent={
                         <button type="button" onClick={toggleIsConfirmVisible} className="flex justify-center items-center">
                             {isConfirmVisible ? <Eye /> : <EyeClosed />}
                         </button>
                     }
-                    errorMessage={errors?.confirmPassword || ""} 
-                    isInvalid={!!errors?.confirmPassword} 
+                    errorMessage={errors?.confirmPassword}
+                    isInvalid={!!errors?.confirmPassword}
+                    onChange={() => onChangeInput("confirmPassword")}
                 />
+
+                <div className="text-default-500">
+                    <p className="inline">¿Ya tienes una cuenta? </p>
+                    <Link href='login' className="border-b-1 text-black border-b-primary font-bold">Inicia sesión</Link>
+                </div>
             </section>
-            
-            <div className="text-default-500">
-                <p className="inline">¿Ya tienes una cuenta? </p>
-                <Link href='login' className="border-b-1 text-black border-b-primary font-bold">Inicia sesión</Link>
-            </div>
 
             <section className="flex gap-5">
-                <Button type="submit" color="primary" radius="none" className="shadow-md w-full">
-                    Regístrate
+                <Button type="submit" color="primary" radius="none" className="shadow-md">
+                    Registrarse
                 </Button>
             </section>
         </Form>
