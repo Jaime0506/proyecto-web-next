@@ -1,11 +1,13 @@
 'use client'
 
 import { Button, Form, Input } from "@heroui/react";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { Eye, EyeClosed, Mail } from "lucide-react";
 import Link from "next/link";
+
 import { loginScheme } from "@/lib/zod";
 import { IErrorsLogin } from "@/types/common";
+import { loginAction } from "@/actions/authActions";
 
 export default function LoginForm() {
 
@@ -17,7 +19,7 @@ export default function LoginForm() {
     const onChangeInput = (name: "email" | "password") => {
         if (!(errors?.email || errors?.password)) return
 
-        const updatedErrors = {...errors}
+        const updatedErrors = { ...errors }
 
         if (name === "email") {
             delete updatedErrors?.email
@@ -28,13 +30,13 @@ export default function LoginForm() {
         setErrors(updatedErrors)
     }
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         // Como manejamos las validaciones desde el cliente, no podemos dejar que llegue al servidor
         e.preventDefault()
         let errorsTemp: IErrorsLogin = {}
 
-        const data = Object.fromEntries(new FormData(e.currentTarget))
-        const validation = loginScheme.safeParse(data)
+        const formData = Object.fromEntries(new FormData(e.currentTarget))
+        const validation = loginScheme.safeParse(formData)
 
         if (!validation.success) {
             const fieldErrors: Record<string, string> = {}
@@ -46,15 +48,8 @@ export default function LoginForm() {
         }
 
         setErrors(errorsTemp)
-        console.log("Los datos pasaron las validaciones")
+        await loginAction(formData)
     }
-
-    useEffect(() => {
-        console.log(errors)
-        return () => {
-
-        };
-    }, [errors]);
 
     return (
         <Form onSubmit={onSubmit} className="flex flex-col gap-7">
