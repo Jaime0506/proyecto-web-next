@@ -6,7 +6,7 @@ export const loginScheme = object({
                 .email("El email es invalido"),
         password: string({ required_error: "La contraseña es requerida" })
                 .min(1, "La contraseña es requerida")
-                .min(8, "La contraseña debe tener mas de 8 caracteres")
+                .min(8, "La contraseña almenos 8 caracteres")
 })
 
 export const registerScheme = object({
@@ -26,10 +26,10 @@ export const registerScheme = object({
         .email("Correo electrónico inválido"),
     password: string()
         .trim()
-        .min(6, "La contraseña debe tener al menos 6 caracteres"),
+        .min(8, "La contraseña debe tener al menos 8 caracteres"),
     confirmPassword: string()
         .trim()
-        .min(6, "La contraseña debe tener al menos 6 caracteres"),
+        .min(8, "La contraseña debe tener al menos 8 caracteres"),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Las contraseñas no coinciden",
     path: ["confirmPassword"],

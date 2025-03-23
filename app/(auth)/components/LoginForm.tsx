@@ -1,18 +1,22 @@
 'use client'
 
 import { Button, Form, Input } from "@heroui/react";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Eye, EyeClosed, Mail } from "lucide-react";
 import Link from "next/link";
 
 import { loginScheme } from "@/lib/zod";
 import { IErrorsLogin } from "@/types/common";
 import { loginAction } from "@/actions/authActions";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
 
+    const [isPending, startTransition] = useTransition()
     const [isVisible, setIsVisible] = useState(false);
     const [errors, setErrors] = useState<IErrorsLogin>();
+    const router = useRouter()
+
 
     const toggleIsVisible = () => setIsVisible(prevState => !prevState);
 
@@ -48,7 +52,20 @@ export default function LoginForm() {
         }
 
         setErrors(errorsTemp)
-        await loginAction(formData)
+
+        startTransition(async () => {
+            const response = await loginAction(formData)
+            
+            if (response?.error) {
+                // Usar toastify
+                console.log(response.error)
+
+                return
+            } 
+
+            router.push('admin')
+
+        })
     }
 
     return (
@@ -109,8 +126,10 @@ export default function LoginForm() {
                     color="primary"
                     radius="none"
                     className="shadow-md"
+                    disabled={isPending}
+                    isLoading={isPending}
                 >
-                    Iniciar sesion
+                    { isPending ? "" : "Iniciar sesion"}
                 </Button>
             </section>
         </Form>

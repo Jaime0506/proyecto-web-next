@@ -1,24 +1,35 @@
 import Credentials from "next-auth/providers/credentials";
+import { loginScheme } from "./lib/zod";
+import { prisma } from "./lib/prisma";
+
 import type { NextAuthConfig } from "next-auth";
 import type { ILogin } from "./types/common";
+import { validatePassword } from "./lib/password";
 
 export default {
     providers: [
         Credentials({
             authorize: async (credentials: ILogin) => {
-                // LLegan los datos que pase desde mi authActions
-                console.log({ credentials })
+                const { data, success } = loginScheme.safeParse({ ...credentials })
 
-                if (credentials.email !== "test@gmail.com") {
-                    throw new Error("Credentials invalid")
-                }
+                // X equis motivo se vulnero el front-end y no llegaron los datos correctamente
+                if (!success) throw new Error("Invalid credentials")
 
+                // Verificar si ya existe en la base de datos
+                const user = await prisma.user.findUnique({
+                    where: {
+                        email: data.email,
+                    }
+                })
 
-                return {
-                    id: "1",
-                    name: "Test user",
-                    email: "test@gmail.com"
-                }
+                if (!user) throw new Error("Invalid credentials")
+
+                // Validar la contraseña
+                const isValid = await validatePassword(data.password, user.passwordHash)
+
+                if(!isValid) throw new Error("Invalid credentials")
+
+                return user
             },
         }),
     ]
