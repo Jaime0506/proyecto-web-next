@@ -63,8 +63,7 @@ export default function LoginForm() {
                 return
             } 
 
-            router.push('admin')
-
+            router.push('dashboard')
         })
     }
 
