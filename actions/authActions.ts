@@ -27,6 +27,7 @@ export const loginAction = async (formData: ILogin) => {
 export const logoutAction = async () => {
     try {
         await signOut({
+            // redirectTo: 'login',
             redirect: false
         })
     } catch (error) {

@@ -1,6 +1,7 @@
 import '@/styles/global.css';
 
 import { Providers } from './providers';
+import ToastifyProvider from './components/ToastifyProvider';
 
 export default function RootLayout({
     children,
@@ -19,6 +20,8 @@ export default function RootLayout({
                         </div>
                     </main>
                 </Providers>
+
+                <ToastifyProvider />
             </body>
         </html>
     );
