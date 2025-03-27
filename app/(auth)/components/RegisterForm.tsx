@@ -1,19 +1,22 @@
 'use client';
 
 import { Button, Form, Input } from "@heroui/react";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Eye, EyeClosed, Mail } from "lucide-react";
 import Link from "next/link";
 import { registerScheme } from "@/lib/zod";
-import { IErrorsRegister } from "@/types/common";
+import { IErrorsRegister, IRegister } from "@/types/common";
+import { registerAction } from "@/actions/authActions";
 
 export default function RegisterForm() {
     const [isVisible, setIsVisible] = useState(false);
     const [isConfirmVisible, setIsConfirmVisible] = useState(false);
     const [errors, setErrors] = useState<IErrorsRegister>({});
+    const [message, setMessage] = useState<string | null>(null);
+    const formRef = useRef<HTMLFormElement>(null); // Agregamos referencia al formulario
 
-    const toggleIsVisible = () => setIsVisible(prevState => !prevState);
-    const toggleIsConfirmVisible = () => setIsConfirmVisible(prevState => !prevState);
+    const toggleIsVisible = () => setIsVisible(prev => !prev);
+    const toggleIsConfirmVisible = () => setIsConfirmVisible(prev => !prev);
 
     const onChangeInput = (name: keyof IErrorsRegister) => {
         if (errors[name]) {
@@ -25,10 +28,13 @@ export default function RegisterForm() {
         }
     };
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const formData = Object.fromEntries(new FormData(e.currentTarget));
+        setMessage(null);
 
+        const formData = Object.fromEntries(new FormData(e.currentTarget)) as IRegister;
+
+        // Validar los datos con Zod
         const validation = registerScheme.safeParse(formData);
         if (!validation.success) {
             const fieldErrors: IErrorsRegister = {};
@@ -39,11 +45,26 @@ export default function RegisterForm() {
             return;
         }
 
-        console.log("Registro exitoso", validation.data);
+        // Llamar a registerAction para registrar al usuario
+        const result = await registerAction(validation.data);
+
+        console.log("Resultado del registro:", result); // Depuración
+
+        if (result?.success) {
+            setMessage(result.success);
+            //Verificar si el formulario existe antes de resetear
+            if (formRef.current) {
+                formRef.current.reset();
+            }
+        } else if (result?.error) {
+            setMessage(result.error);
+        } else {
+            setMessage("Error desconocido al registrar.");
+        }
     };
 
     return (
-        <Form onSubmit={onSubmit} className="flex flex-col gap-7">
+        <Form ref={formRef} onSubmit={onSubmit} className="flex flex-col gap-7">
             <section className="flex flex-1 flex-col gap-4 w-full">
                 <Input
                     isRequired
@@ -128,12 +149,14 @@ export default function RegisterForm() {
                     isInvalid={!!errors?.confirmPassword}
                     onChange={() => onChangeInput("confirmPassword")}
                 />
-
-                <div className="text-default-500">
-                    <p className="inline">¿Ya tienes una cuenta? </p>
-                    <Link href='login' className="border-b-1 text-black border-b-primary font-bold">Inicia sesión</Link>
-                </div>
             </section>
+
+            {message && <p className="text-center text-red-500">{message}</p>}
+
+            <div className="text-default-500">
+                <p className="inline">¿Ya tienes una cuenta? </p>
+                <Link href="login" className="border-b-1 text-black border-b-primary font-bold">Inicia sesión</Link>
+            </div>
 
             <section className="flex gap-5">
                 <Button type="submit" color="primary" radius="none" className="shadow-md">
