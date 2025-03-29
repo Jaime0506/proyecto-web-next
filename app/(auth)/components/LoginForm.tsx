@@ -9,8 +9,12 @@ import { loginScheme } from "@/lib/zod";
 import { IErrorsLogin } from "@/types/common";
 import { loginAction } from "@/actions/authActions";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+
 
 export default function LoginForm() {
+
+    const router = useRouter()
 
     const [isPending, startTransition] = useTransition()
     const [isVisible, setIsVisible] = useState(false);
@@ -64,6 +68,10 @@ export default function LoginForm() {
                 return
             }
 
+            if (response.success) {
+                // Redirigir a la pagina de dashboard
+                router.push("dashboard")
+            }
         })
     }
 

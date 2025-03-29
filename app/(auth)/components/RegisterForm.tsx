@@ -7,12 +7,17 @@ import Link from "next/link";
 import { registerScheme } from "@/lib/zod";
 import { IErrorsRegister, IRegister } from "@/types/common";
 import { registerAction } from "@/actions/authActions";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function RegisterForm() {
+
+    const router = useRouter();
+
     const [isVisible, setIsVisible] = useState(false);
     const [isConfirmVisible, setIsConfirmVisible] = useState(false);
     const [errors, setErrors] = useState<IErrorsRegister>({});
-    const [message, setMessage] = useState<string | null>(null);
+    
     const formRef = useRef<HTMLFormElement>(null); // Agregamos referencia al formulario
 
     const toggleIsVisible = () => setIsVisible(prev => !prev);
@@ -30,12 +35,12 @@ export default function RegisterForm() {
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setMessage(null);
 
         const formData = Object.fromEntries(new FormData(e.currentTarget)) as IRegister;
 
         // Validar los datos con Zod
         const validation = registerScheme.safeParse(formData);
+
         if (!validation.success) {
             const fieldErrors: IErrorsRegister = {};
             validation.error.errors.forEach(err => {
@@ -46,21 +51,11 @@ export default function RegisterForm() {
         }
 
         // Llamar a registerAction para registrar al usuario
-        const result = await registerAction(validation.data);
+        const { error } = await registerAction(validation.data);
 
-        console.log("Resultado del registro:", result); // Depuración
-
-        if (result?.success) {
-            setMessage(result.success);
-            //Verificar si el formulario existe antes de resetear
-            if (formRef.current) {
-                formRef.current.reset();
-            }
-        } else if (result?.error) {
-            setMessage(result.error);
-        } else {
-            setMessage("Error desconocido al registrar.");
-        }
+        if (error) return toast.error(error) 
+        
+        router.push("dashboard")
     };
 
     return (
@@ -92,7 +87,7 @@ export default function RegisterForm() {
                 />
                 <Input
                     isRequired
-                    type="text"
+                    type="number"
                     name="cedula"
                     label="Cédula"
                     variant="bordered"
@@ -150,8 +145,6 @@ export default function RegisterForm() {
                     onChange={() => onChangeInput("confirmPassword")}
                 />
             </section>
-
-            {message && <p className="text-center text-red-500">{message}</p>}
 
             <div className="text-default-500">
                 <p className="inline">¿Ya tienes una cuenta? </p>

@@ -1,15 +1,14 @@
 import LogoutButton from "@/app/components/LogoutButton"
 import { auth } from "@/auth"
-// import { redirect } from "next/navigation"
+import { redirect } from "next/navigation"
 
 export default async function AdminPage() {
     const session = await auth()
 
     if (!session) {
-        <div>Emote</div>
-
-        console.log(session)
+        redirect("login")
     }
+
     return (
         <div>
             <p>Autenticado:</p>

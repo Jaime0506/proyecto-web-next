@@ -1,10 +1,12 @@
 import Credentials from "next-auth/providers/credentials";
+
 import { loginScheme } from "./lib/zod";
 import { prisma } from "./lib/prisma";
 
+import { validatePassword } from "./lib/password";
+
 import type { NextAuthConfig } from "next-auth";
 import type { ILogin } from "./types/common";
-import { validatePassword } from "./lib/password";
 
 export default {
     providers: [

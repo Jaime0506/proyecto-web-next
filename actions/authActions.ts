@@ -1,25 +1,28 @@
-// con esto puedo hacer que las llamadas al servidor funcionen
 "use server"
 
 import { signIn, signOut } from "@/auth"
 import { AuthError } from "next-auth"
 import { prisma } from "@/lib/prisma";
-import type { IRegister } from "@/types/common";
-import type { ILogin } from "@/types/common"
 import { hashPassword } from "@/lib/password";
+import { registerScheme } from "@/lib/zod";
+
+import type { IRegister, ILogin } from "@/types/common";
 
 // Esta es la funcion que se ejecuta en mi cliente
 export const loginAction = async (formData: ILogin) => {
     try {
         // Entra a la funcion de authorize en mi auth.config y se hace la validacion / modificacion en mi base de datos
-        await signIn("credentials", { 
+        await signIn("credentials", {
             email: formData.email,
             password: formData.password,
             redirect: false
         })
+
+        return { success: true, error: null }
+
     } catch (error) {
         if (error instanceof AuthError) {
-            return { error: error.cause?.err?.message}
+            return { error: error.cause?.err?.message }
         }
 
         return { error: "Error 500" }
@@ -27,26 +30,38 @@ export const loginAction = async (formData: ILogin) => {
 }
 
 export const logoutAction = async () => {
+    console.log("Se llamo")
+
     try {
         await signOut({
             // redirectTo: 'login',
             redirect: false
         })
+
+        return { success: true, error: null }
+
     } catch (error) {
-        console.log(error)
+        if (error instanceof AuthError) {
+            return { error: error.cause?.err?.message }
+        }
+
+        return { error: "Error 500" }
     }
 }
 
 export const registerAction = async (formData: IRegister) => {
     try {
+        // Verificar si los campos requeridos están presentes
+        const { data, success } = registerScheme.safeParse({ ...formData })
+
+        if (!success) throw ("Los datos ingresados son incorrectos")
+
         // Verificar si el usuario ya existe
         const existingUser = await prisma.user.findUnique({
-            where: { email: formData.email },
+            where: { email: data.email },
         });
 
-        if (existingUser) {
-            return { error: "El correo electrónico ya está registrado" };
-        }
+        if (existingUser) throw ("El usuario a registrar ya existe uwu")
 
         // Hashear la contraseña
         const hashedPassword = hashPassword(formData.password!);
@@ -62,9 +77,15 @@ export const registerAction = async (formData: IRegister) => {
             },
         });
 
-        return { success: "Registro exitoso" };
+        await signIn("credentials", {
+            email: formData.email,
+            password: formData.password,
+            redirect: false,
+        })
+
+        return { success: true, error: null };
+
     } catch (error) {
-        console.error("Error al registrar usuario:", error);
-        return { error: "Error al registrar usuario" };
+        return { success: false, error: error as string};
     }
 };
