@@ -1,4 +1,4 @@
-import LogoutButton from "@/app/(protected)/components/LogoutButton"
+import LogoutButton from "../components/LogoutButton";
 
 export default async function AdminPage() {
     return (

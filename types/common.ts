@@ -39,3 +39,5 @@ export interface IJWT {
     email?: string
     role?: string
 }
+
+export type IRole = "USER" | "ADMIN" | "COORDINATOR" | undefined 
