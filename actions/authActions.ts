@@ -30,8 +30,6 @@ export const loginAction = async (formData: ILogin) => {
 }
 
 export const logoutAction = async () => {
-    console.log("Se llamo")
-
     try {
         await signOut({
             // redirectTo: 'login',

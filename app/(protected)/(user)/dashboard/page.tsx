@@ -1,7 +1,8 @@
+import LogoutButton from "@/app/(protected)/components/LogoutButton"
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 
-export default async function UserDashboardPage() {
+export default async function UserPage() {
     const session = await auth()
 
     if (!session) redirect('login')
@@ -9,6 +10,8 @@ export default async function UserDashboardPage() {
     return (
         <div>
             <pre>{JSON.stringify(session, null, 5)}</pre>
+
+            <LogoutButton />
         </div>
     )
 }

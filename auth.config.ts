@@ -31,8 +31,6 @@ export default {
 
                 if(!isValid) throw new Error("Invalid credentials")
 
-                console.log(user)
-
                 return user
             },
         }),

@@ -1,5 +1,11 @@
-export default function page() {
+import LogoutButton from "../components/LogoutButton";
+
+export default function CoordinatorPage() {
     return (
-        <div>Tengo que ser coordinador</div>
+        <div>
+            Coordiandorr 
+
+            <LogoutButton />
+        </div>
     )
 }
