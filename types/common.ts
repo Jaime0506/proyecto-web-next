@@ -22,10 +22,12 @@ export type IErrorsRegister = IRegister
 
 export interface IUser {
     id: string
+    nationalId: string
     firstName?: string
     lastName?: string
     email?: string
     role?: string
+    status?: boolean
 }
 
 export interface ISession {
@@ -34,6 +36,7 @@ export interface ISession {
 
 export interface IJWT {
     id: string
+    nationalId: string
     firstName?: string
     lastName?: string
     email?: string

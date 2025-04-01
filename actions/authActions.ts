@@ -59,7 +59,7 @@ export const registerAction = async (formData: IRegister) => {
             where: { email: data.email },
         });
 
-        if (existingUser) throw ("El usuario a registrar ya existe uwu")
+        if (existingUser) throw ("El usuario a registrar ya existe")
 
         // Hashear la contraseña
         const hashedPassword = hashPassword(formData.password!);
@@ -67,7 +67,7 @@ export const registerAction = async (formData: IRegister) => {
         // Guardar usuario en la base de datos
         await prisma.user.create({
             data: {
-                id: formData.cedula!,
+                national_id: formData.cedula!,
                 firstName: formData.firstName!,
                 lastName: formData.lastName!,
                 email: formData.email!,

@@ -3,6 +3,7 @@ import authConfig from "./auth.config"
 
 import { NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
+import { matchesPattern } from "./utils/matchesPattern"
 
 const { auth: middleware } = NextAuth(authConfig)
 
@@ -12,7 +13,7 @@ const protectedRoutes = {
     USER: ["/dashboard", "/dashboard/:path*"],
 };
 
-const publicRoutes = ["/login", "/register", "/"];
+const publicRoutes = ["/login", "/register", "/", "/api/v1/admin/(.*)"];
 
 const defaultRoutes = {
     ADMIN: "/admin",
@@ -28,10 +29,13 @@ export default middleware(async (req) => {
     const role = token?.role as keyof typeof protectedRoutes | undefined;
 
     if (!role || !isLogged) {
+        const isPublicRoute = publicRoutes.some((pattern) => matchesPattern(nextUrl.pathname, pattern));
+        
         // Usuario no autenticado
-        if (!publicRoutes.includes(nextUrl.pathname)) {
+        if (!isPublicRoute) {
             return NextResponse.redirect(new URL(publicRoutes[0], nextUrl));
         }
+
         return NextResponse.next();
     }
 
@@ -44,7 +48,7 @@ export default middleware(async (req) => {
         // Usuario autenticado intentando acceder a una ruta no permitida
         return NextResponse.redirect(new URL(defaultRoutes[role], nextUrl));
     }
-
+    
     return NextResponse.next();
 })
 

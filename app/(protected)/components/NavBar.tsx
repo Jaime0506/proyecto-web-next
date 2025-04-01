@@ -1,12 +1,14 @@
-import { IRole } from "@/types/common"
 import Link from "next/link"
 import LogoutButton from "./LogoutButton"
+import { navItems } from "@/utils/navItems"
+
+import type { IRole } from "@/types/common"
 
 interface NavBarProps {
     role: IRole
 }
 
-export const NavBar = ({ role }: NavBarProps) => {
+export const NavBar = async ({ role }: NavBarProps) => {
     if (!role) return <></>
 
     return (
@@ -26,23 +28,4 @@ export const NavBar = ({ role }: NavBarProps) => {
             </nav>
         </header>
     )
-}
-
-
-const navItems = {
-    ADMIN: [
-        { name: 'Dashboard', path: '/admin/dashboard' },
-        { name: 'Users', path: '/admin/users' },
-        { name: 'Settings', path: '/admin/settings' },
-    ],
-    COORDINATOR: [
-        { name: 'Dashboard', path: '/coordinator/dashboard' },
-        { name: 'Users', path: '/coordinator/users' },
-        { name: 'Settings', path: '/coordinator/settings' },
-    ],
-    USER: [
-        { name: 'Dashboard', path: '/dashboard' },
-        { name: 'Profile', path: '/profile' },
-        { name: 'Settings', path: '/settings' },
-    ]
 }
