@@ -3,7 +3,7 @@ import '@/styles/global.css';
 import { Providers } from './providers';
 import ToastifyProvider from './components/ToastifyProvider';
 import { auth } from '@/auth';
-import { NavBar } from './(protected)/components/NavBar';
+import NavBar from './(protected)/components/NavBar';
 import { IRole } from '@/types/common';
 
 export default async function RootLayout({
@@ -26,7 +26,6 @@ export default async function RootLayout({
                         </div>
                     </main>
                 </Providers>
-
                 <ToastifyProvider />
             </body>
         </html>

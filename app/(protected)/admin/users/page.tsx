@@ -4,8 +4,6 @@ export default async function UsersPage() {
     const response = await fetch("http://localhost:3000/api/v1/admin/users")
     const { data, ok } = await response.json()
 
-    console.log(data)
-
     if (!ok) {
         return (
             <div>

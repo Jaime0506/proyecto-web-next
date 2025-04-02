@@ -13,7 +13,13 @@ const protectedRoutes = {
     USER: ["/dashboard", "/dashboard/:path*"],
 };
 
-const publicRoutes = ["/login", "/register", "/", "/api/v1/admin/(.*)"];
+const publicRoutes = [
+    "/",
+    "/login",
+    "/register",
+    "/api/v1/admin/(.*)",
+    // "/api/auth/(.*)"
+];
 
 const defaultRoutes = {
     ADMIN: "/admin",
@@ -30,10 +36,10 @@ export default middleware(async (req) => {
 
     if (!role || !isLogged) {
         const isPublicRoute = publicRoutes.some((pattern) => matchesPattern(nextUrl.pathname, pattern));
-        
+
         // Usuario no autenticado
         if (!isPublicRoute) {
-            return NextResponse.redirect(new URL(publicRoutes[0], nextUrl));
+            return NextResponse.redirect(new URL(publicRoutes[1], nextUrl));
         }
 
         return NextResponse.next();
@@ -48,7 +54,7 @@ export default middleware(async (req) => {
         // Usuario autenticado intentando acceder a una ruta no permitida
         return NextResponse.redirect(new URL(defaultRoutes[role], nextUrl));
     }
-    
+
     return NextResponse.next();
 })
 

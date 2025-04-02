@@ -8,7 +8,7 @@ interface NavBarProps {
     role: IRole
 }
 
-export const NavBar = async ({ role }: NavBarProps) => {
+export default async function NavBar({ role }: NavBarProps) {
     if (!role) return <></>
 
     return (

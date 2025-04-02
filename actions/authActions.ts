@@ -67,11 +67,12 @@ export const registerAction = async (formData: IRegister) => {
         // Guardar usuario en la base de datos
         await prisma.user.create({
             data: {
-                national_id: formData.cedula!,
+                nationalId: formData.cedula!,
                 firstName: formData.firstName!,
                 lastName: formData.lastName!,
                 email: formData.email!,
                 passwordHash: hashedPassword,
+                
             },
         });
 
