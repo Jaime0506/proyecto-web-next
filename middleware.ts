@@ -18,7 +18,6 @@ const publicRoutes = [
     "/login",
     "/register",
     "/api/v1/admin/(.*)",
-    // "/api/auth/(.*)"
 ];
 
 const defaultRoutes = {

@@ -14,8 +14,8 @@ export default async function UsersPage() {
     }
 
     return (
-        <main className="flex flex-col items-center pt-10">
-            <TableUsers rows={data}/>
+        <main className="flex flex-col items-center pt-10 p-16">
+            <TableUsers rows={data} />
         </main>
     )
 }
