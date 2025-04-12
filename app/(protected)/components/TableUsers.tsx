@@ -2,8 +2,9 @@
 
 import { IUser } from "@/types/common";
 import { columnsUser } from "@/utils/columnsUser";
-import { renderCell } from "@/utils/tableFunctions";
+
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
+import { renderCell } from "../admin/components/table/renderCell";
 
 interface TableUsersProps {
     rows: IUser[]
