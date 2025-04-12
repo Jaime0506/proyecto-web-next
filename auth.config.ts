@@ -31,7 +31,17 @@ export default {
 
                 if(!isValid) throw new Error("Invalid credentials")
 
-                return user
+                return {
+                    id: user.id,
+                    role: user.role,
+                    nationalId: user.nationalId || "", // Ensure nationalId is a string
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    status: user.status,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt,
+                }
             },
         }),
     ]

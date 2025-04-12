@@ -1,13 +1,29 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
 import "next-auth/jwt";
-import type { IJWT, ISession, IUser } from "./common";
 
 declare module "next-auth" {
-    interface User extends IUser{} 
+    interface User {
+        id: string
+        nationalId: string
+        firstName?: string
+        lastName?: string
+        email?: string
+        role?: string
+        status?: boolean
+    }
 
-    interface Session extends ISession {}
+    interface Session {
+        user: User & DefaultSession["user"]
+    }
 }
 
 declare module "next-auth/jwt" {
-    interface JWT extends IJWT{}
+    interface JWT {
+        id: string
+        nationalId: string
+        firstName?: string
+        lastName?: string
+        email?: string
+        role?: string
+        status?: boolean
+    }
 }
