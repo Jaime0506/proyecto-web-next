@@ -1,5 +1,6 @@
 import { IUser } from "@/types/common"
-import { Chip } from "@heroui/react"
+import { Chip, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react"
+import { Ellipsis, Mail } from "lucide-react"
 
 export const renderCell = (user: IUser, columnKey: string) => {
     const cellValue = user[columnKey as keyof IUser]
@@ -7,13 +8,21 @@ export const renderCell = (user: IUser, columnKey: string) => {
     if (columnKey === "role") {
         return (
             <div className="flex flex-col">
-                <p className="text-bold text-small capitalize">{cellValue}</p>
+                <p className="text-bold text-small capitalize">{(cellValue as string)}</p>
+            </div>
+        )
+    }
+
+    if (columnKey === "email") {
+        return (
+            <div className="flex flex-row items-center gap-2">
+                <Mail size={16} />
+                <p className="text-bold text-small">{cellValue}</p>
             </div>
         )
     }
 
     if (columnKey === "status") {
-
         return (
             <Chip
                 className={user.status ? "border-success-200" : "border-danger-200"}
@@ -23,6 +32,25 @@ export const renderCell = (user: IUser, columnKey: string) => {
             >
                 {user.status ? "Activo" : "Inactivo"}
             </Chip>
+        )
+    }
+
+    if (columnKey === "actions") {
+        return (
+            <Dropdown>
+                <DropdownTrigger>
+                    <button>
+                        <Ellipsis />
+                    </button>
+                </DropdownTrigger>
+                <DropdownMenu>
+                    <DropdownItem key="show" >Ver</DropdownItem>
+                    <DropdownItem key="edit" >Editar</DropdownItem>
+                    <DropdownItem key="delete" >Eliminar</DropdownItem>
+                </DropdownMenu>
+
+            </Dropdown>
+
         )
     }
 

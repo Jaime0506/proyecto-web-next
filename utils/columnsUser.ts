@@ -1,7 +1,7 @@
 export const columnsUser = [
     {
         key: "nationalId",
-        label: "CEDULA",
+        label: "Cedula",
     },
     {
         key: "firstName",
@@ -23,5 +23,9 @@ export const columnsUser = [
         key: "status",
         label: "Estado",
     },
+    {
+        key: "actions",
+        label: "Acciones",
+    }
 
 ];
