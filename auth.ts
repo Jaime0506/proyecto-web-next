@@ -14,10 +14,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // aca podemos agregar informacion adicional que queramos guardar en el token
         jwt({ token, user }) {
             if (user) {
-                token.role = user.role
+                token.id = user.id ?? ""
+                token.nationalId = user.nationalId ?? "" // Asegurarse de que nationalId sea una cadena
+                token.email = user.email ?? ""
                 token.firstName = user.firstName
                 token.lastName = user.lastName
-                token.id = user.id ?? ""
+                token.role = user.role
+                token.status = user.status
             }
 
             return token
@@ -28,9 +31,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session({ session, token }) {
             if (session.user) {
                 session.user.id = token.id
-                session.user.role = token.role
+                session.user.nationalId = token.nationalId ?? "" // Asegurarse de que nationalId sea una cadena
+                session.user.email = token.email ?? ""
                 session.user.firstName = token.firstName
                 session.user.lastName = token.lastName
+                session.user.role = token.role
+                session.user.status = token.status
             }
 
             return session

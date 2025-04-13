@@ -72,7 +72,6 @@ export const registerAction = async (formData: IRegister) => {
                 lastName: formData.lastName!,
                 email: formData.email!,
                 passwordHash: hashedPassword,
-                
             },
         });
 
