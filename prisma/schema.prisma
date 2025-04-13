@@ -20,8 +20,8 @@ enum ApplicationStatus {
 }
 
 model User {
-  id                   String            @id @default(cuid()) @map("id") /// id db
-  nationalId           String           @unique @map("national_id") @db.VarChar(10) /// Cédula
+  id                   String            @id @default(cuid()) /// id db
+  nationalId           String            @unique @map("national_id") @db.VarChar(10) /// Cédula
   firstName            String            @map("first_name")
   lastName             String            @map("last_name")
   email                String            @unique
@@ -37,7 +37,7 @@ model User {
   Account              Account[]
 
   @@index([id])
-  @@index([nationalId])
+  // @@index([nationalId])
   @@index([email])
   @@map("users")
 }

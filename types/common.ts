@@ -11,6 +11,7 @@ export interface IRegister extends ILogin {
     firstName?: string;
     lastName?: string;
     cedula?: string;
+    password?: string;
     confirmPassword?: string;
 }
 
@@ -22,7 +23,7 @@ export type IErrorsRegister = IRegister
 
 export interface IUser {
     id: string
-    nationalId?: string
+    nationalId: string
     firstName?: string
     lastName?: string
     email?: string
@@ -36,11 +37,12 @@ export interface ISession {
 
 export interface IJWT {
     id: string
-    nationalId?: string
+    nationalId: string
     firstName?: string
     lastName?: string
     email?: string
     role?: string
+    status?: boolean
 }
 
 export type IRole = "USER" | "ADMIN" | "COORDINATOR" | undefined 

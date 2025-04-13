@@ -15,10 +15,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         jwt({ token, user }) {
             if (user) {
                 token.id = user.id ?? ""
-                token.nationalId = user.nationalId ?? "" // Asegurarse de que nationalId sea una cadena
-                token.email = user.email ?? ""
+                token.nationalId = user.nationalId
                 token.firstName = user.firstName
                 token.lastName = user.lastName
+                token.email = user.email ?? ""
                 token.role = user.role
                 token.status = user.status
             }
@@ -29,10 +29,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // session() se utiliza para agregar la infroacion del token a la session, ya que a esto
         // es lo que tenemos acceso desde el cliente
         session({ session, token }) {
+
+            // Aca no tengo que validar que si llegen, porque todo lo del token ya se le asigno un valor
             if (session.user) {
                 session.user.id = token.id
-                session.user.nationalId = token.nationalId ?? "" // Asegurarse de que nationalId sea una cadena
-                session.user.email = token.email ?? ""
+                session.user.nationalId = token.nationalId 
+                session.user.email = token.email
                 session.user.firstName = token.firstName
                 session.user.lastName = token.lastName
                 session.user.role = token.role
