@@ -17,7 +17,7 @@ export default function TableUsers({ rows }: TableUsersProps) {
 
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
     const [page, setPage] = useState(1)
-    const [rowsPerPage, setRowsPerPage] = useState(7)
+    const [rowsPerPage, setRowsPerPage] = useState(5)
     
     const getItems = () => {
         const start = (page - 1) * rowsPerPage;
@@ -30,9 +30,9 @@ export default function TableUsers({ rows }: TableUsersProps) {
         <Table
             isHeaderSticky
             aria-labelledby="table-users"
-            topContent={<TopContent />}
+            topContent={<TopContent lenght={rows.length} action={setRowsPerPage} />}
             topContentPlacement="outside"
-            bottomContent={<BotContent />}
+            bottomContent={<BotContent setPage={setPage} />}
             bottomContentPlacement="outside"
             selectedKeys={selectedKeys}
             onSelectionChange={setSelectedKeys}
