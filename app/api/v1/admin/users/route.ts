@@ -41,7 +41,7 @@ export async function GET(): Promise<Response> {
 export async function POST(req: Request): Promise<Response> {
     try {
         const body = await req.json();
-        const { nationalId, firstName, lastName, email, role } = body;
+        const { nationalId, firstName, lastName, email, role, status } = body;
 
         // Generar contraseña aleatoria si no se proporciona
         const { plainPassword, hashedPassword } = generateRandomPassword();
@@ -55,7 +55,7 @@ export async function POST(req: Request): Promise<Response> {
                 email,
                 passwordHash: hashedPassword,
                 role,
-                status: true, // Puedes ajustar el estado inicial según sea necesario
+                status: status, // Puedes ajustar el estado inicial según sea necesario
             },
         });
 
