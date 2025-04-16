@@ -1,42 +1,48 @@
 'use client'
+import { useState } from "react";
 
-import { IUser } from "@/types/common";
+import { Selection, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
+import { renderCell } from "./renderCell";
 import { columnsUser } from "@/utils/columnsUser";
 
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
-import { renderCell } from "./renderCell";
 import TopContent from "./TopContent";
 import BotContent from "./BotContent";
-// import { useState } from "react";
 
+import type { IUser } from "@/types/common";
 interface TableUsersProps {
     rows: IUser[]
 }
 
 export default function TableUsers({ rows }: TableUsersProps) {
+
+    const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
+    const [page, setPage] = useState(1)
+    const [rowsPerPage, setRowsPerPage] = useState(7)
     
-    // const itemsPerPage = (rows) => {
-    //     const start = (page - 1) * rowPorPage;
-    //     const end = start + rowPorPage;
-    //     return rows.slice(start, end);
-    // }
+    const getItems = () => {
+        const start = (page - 1) * rowsPerPage;
+        const end = page * rowsPerPage;
+
+        return rows.slice(start, end);
+    }
 
     return (
         <Table
             isHeaderSticky
             aria-labelledby="table-users"
-            selectionMode="multiple"
-            // topContent={<TopContent />}
-            // topContentPlacement="outside"
-            // bottomContent={<BotContent />}
-            // bottomContentPlacement="outside"
+            topContent={<TopContent />}
+            topContentPlacement="outside"
+            bottomContent={<BotContent />}
+            bottomContentPlacement="outside"
+            selectedKeys={selectedKeys}
+            onSelectionChange={setSelectedKeys}
         >
             <TableHeader
                 columns={columnsUser}
             >
                 {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
             </TableHeader>
-            <TableBody emptyContent={"No hay usuarios"} items={rows}>
+            <TableBody emptyContent={"No hay usuarios"} items={getItems()}>
                 {(item) => (
                     <TableRow key={item.nationalId}>
                         {(columnKey) => <TableCell>{renderCell(item, columnKey as string)}</TableCell>}
