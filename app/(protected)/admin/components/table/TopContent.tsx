@@ -1,11 +1,13 @@
+'use client'
+
 import { Button, Input } from "@heroui/react";
 import { Search } from "lucide-react";
 
 interface TopContentProps {
-    size?: number
+    lenght?: number
 }
 
-export default function TopContent({ size }: TopContentProps) {
+export default function TopContent({ lenght }: TopContentProps) {
     return (
         <div className="flex flex-row items-center gap-4">
             <Input
@@ -20,7 +22,7 @@ export default function TopContent({ size }: TopContentProps) {
                 Crear usuario
             </Button>
 
-            { size && <>{size}</>}
+            { lenght && <>{lenght}</>}
         </div>
     )
 }
