@@ -3,8 +3,8 @@
 import { signIn, signOut } from "@/auth"
 import { AuthError } from "next-auth"
 import { prisma } from "@/lib/prisma";
-import { hashPassword } from "@/lib/password";
-import { registerScheme } from "@/lib/zod";
+import { hashPassword } from "@/utils/password";
+import { registerScheme } from "@/utils/zod";
 
 import type { IRegister, ILogin } from "@/types/common";
 

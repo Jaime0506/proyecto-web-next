@@ -4,7 +4,7 @@ import { Button, Form, Input } from "@heroui/react";
 import React, { useState, useRef } from "react";
 import { Eye, EyeClosed, Mail } from "lucide-react";
 import Link from "next/link";
-import { registerScheme } from "@/lib/zod";
+import { registerScheme } from "@/utils/zod";
 import { IErrorsRegister, IRegister } from "@/types/common";
 import { registerAction } from "@/actions/authActions";
 import { useRouter } from "next/navigation";

@@ -22,8 +22,8 @@ export type IErrorsLogin = ILogin
 export type IErrorsRegister = IRegister
 
 export interface IUser {
-    id: string
-    nationalId: string
+    id?: string
+    nationalId?: string
     firstName?: string
     lastName?: string
     email?: string
@@ -46,3 +46,12 @@ export interface IJWT {
 }
 
 export type IRole = "USER" | "ADMIN" | "COORDINATOR" | undefined 
+
+export type ApiResponse<T> = {
+    ok: boolean,
+    data?: T,
+    error?: {
+        message: string,
+        code?: string,
+    }
+}

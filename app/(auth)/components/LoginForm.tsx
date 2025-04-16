@@ -5,7 +5,7 @@ import { useState, useTransition } from "react";
 import { Eye, EyeClosed, Mail } from "lucide-react";
 import Link from "next/link";
 
-import { loginScheme } from "@/lib/zod";
+import { loginScheme } from "@/utils/zod";
 import { IErrorsLogin } from "@/types/common";
 import { loginAction } from "@/actions/authActions";
 import { toast } from "react-toastify";
