@@ -1,5 +1,6 @@
 'use client'
 
+import { KeyOpenModal } from "@/types/common"
 import { Chip, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react"
 import { Ellipsis, Eye, Mail, Pencil, Trash } from "lucide-react"
 
@@ -27,7 +28,11 @@ export const Status = ({ status }: { status: boolean }) => (
     </Chip>
 )
 
-export const Actions = () => (
+interface ActionsProps {
+    openModal: (key: KeyOpenModal) => void
+}
+
+export const Actions = ({ openModal }: ActionsProps) => (
     <Dropdown>
         <DropdownTrigger>
             <button>
@@ -40,13 +45,14 @@ export const Actions = () => (
                 color="success"
                 className="focus:text-white"
                 startContent={<Eye size={16} />}
-                onPress={() => alert("Alerta")}
+                onPress={() => openModal("show")}
             >
                 Ver
             </DropdownItem>
             <DropdownItem
                 key="edit"
                 startContent={<Pencil size={16} />}
+                onPress={() => openModal("edit")}
             >
                 Editar
             </DropdownItem>
@@ -55,6 +61,7 @@ export const Actions = () => (
                 color="danger"
                 className="text-danger"
                 startContent={<Trash size={16} />}
+                onPress={() => openModal("delete")}
             >
                 Eliminar
             </DropdownItem>

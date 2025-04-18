@@ -8,13 +8,14 @@ import { columnsUser } from "@/utils/columnsUser";
 import TopContent from "./TopContent";
 import BotContent from "./BotContent";
 
-import type { IUser } from "@/types/common";
+import type { IUser, KeyOpenModal } from "@/types/common";
 
 interface TableUsersProps {
     rows: IUser[];
+    openModal: (key: KeyOpenModal) => void;
 }
 
-export default function TableUsers({ rows }: TableUsersProps) {
+export default function TableUsers({ rows, openModal }: TableUsersProps) {
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -70,7 +71,7 @@ export default function TableUsers({ rows }: TableUsersProps) {
             <TableBody emptyContent={"No hay usuarios"} items={items}>
                 {(item) => (
                     <TableRow key={item.nationalId}>
-                        {(columnKey) => <TableCell>{renderCell(item, columnKey as string)}</TableCell>}
+                        {(columnKey) => <TableCell>{renderCell(item, columnKey as string, openModal)}</TableCell>}
                     </TableRow>
                 )}
             </TableBody>

@@ -55,3 +55,5 @@ export type ApiResponse<T> = {
         code?: string,
     }
 }
+
+export type KeyOpenModal = "show" | "edit" | "delete"
