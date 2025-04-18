@@ -12,7 +12,7 @@ import type { IUser, KeyOpenModal } from "@/types/common";
 
 interface TableUsersProps {
     rows: IUser[];
-    openModal: (key: KeyOpenModal) => void;
+    openModal: (key: KeyOpenModal, userId: string) => void;
 }
 
 export default function TableUsers({ rows, openModal }: TableUsersProps) {
@@ -71,7 +71,7 @@ export default function TableUsers({ rows, openModal }: TableUsersProps) {
             <TableBody emptyContent={"No hay usuarios"} items={items}>
                 {(item) => (
                     <TableRow key={item.nationalId}>
-                        {(columnKey) => <TableCell>{renderCell(item, columnKey as string, openModal)}</TableCell>}
+                        {(columnKey) => <TableCell>{renderCell(item, columnKey as string, openModal, item.nationalId || "")}</TableCell>}
                     </TableRow>
                 )}
             </TableBody>

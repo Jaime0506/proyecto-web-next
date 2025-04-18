@@ -29,10 +29,11 @@ export const Status = ({ status }: { status: boolean }) => (
 )
 
 interface ActionsProps {
-    openModal: (key: KeyOpenModal) => void
+    openModal: (key: KeyOpenModal, userId: string) => void
+    id: string
 }
 
-export const Actions = ({ openModal }: ActionsProps) => (
+export const Actions = ({ openModal, id }: ActionsProps) => (
     <Dropdown>
         <DropdownTrigger>
             <button>
@@ -45,14 +46,14 @@ export const Actions = ({ openModal }: ActionsProps) => (
                 color="success"
                 className="focus:text-white"
                 startContent={<Eye size={16} />}
-                onPress={() => openModal("show")}
+                onPress={() => openModal("show", id)}
             >
                 Ver
             </DropdownItem>
             <DropdownItem
                 key="edit"
                 startContent={<Pencil size={16} />}
-                onPress={() => openModal("edit")}
+                onPress={() => openModal("edit", id)}
             >
                 Editar
             </DropdownItem>
@@ -61,7 +62,7 @@ export const Actions = ({ openModal }: ActionsProps) => (
                 color="danger"
                 className="text-danger"
                 startContent={<Trash size={16} />}
-                onPress={() => openModal("delete")}
+                onPress={() => openModal("delete", id)}
             >
                 Eliminar
             </DropdownItem>
