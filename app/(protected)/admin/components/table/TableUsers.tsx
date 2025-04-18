@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Selection, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 import { renderCell } from "./renderCell";
@@ -18,13 +18,17 @@ export default function TableUsers({ rows }: TableUsersProps) {
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(5)
-    
-    const getItems = () => {
+
+    const pages = useMemo(() => { 
+        return Math.ceil(rows.length / rowsPerPage) 
+    }, [rows.length, rowsPerPage])
+
+    const items = useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = page * rowsPerPage;
 
         return rows.slice(start, end);
-    }
+    }, [page, rows, rowsPerPage])
 
     return (
         <Table
@@ -32,7 +36,7 @@ export default function TableUsers({ rows }: TableUsersProps) {
             aria-labelledby="table-users"
             topContent={<TopContent lenght={rows.length} action={setRowsPerPage} />}
             topContentPlacement="outside"
-            bottomContent={<BotContent setPage={setPage} />}
+            bottomContent={<BotContent setPage={setPage} pages={pages} page={page} />}
             bottomContentPlacement="outside"
             selectedKeys={selectedKeys}
             onSelectionChange={setSelectedKeys}
@@ -42,7 +46,7 @@ export default function TableUsers({ rows }: TableUsersProps) {
             >
                 {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
             </TableHeader>
-            <TableBody emptyContent={"No hay usuarios"} items={getItems()}>
+            <TableBody emptyContent={"No hay usuarios"} items={items}>
                 {(item) => (
                     <TableRow key={item.nationalId}>
                         {(columnKey) => <TableCell>{renderCell(item, columnKey as string)}</TableCell>}
